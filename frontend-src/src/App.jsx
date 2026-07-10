@@ -348,7 +348,14 @@ function App() {
       </header>
 
       {/* Main Container */}
-      <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 relative overflow-visible">
+        
+        {/* Animated Aurora Mesh Gradient Blobs */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[450px] overflow-hidden pointer-events-none -z-10 select-none">
+          <div className="absolute -top-12 left-[15%] w-72 h-72 rounded-full bg-blue-500/20 dark:bg-blue-600/10 blur-[100px] animate-blob-1" />
+          <div className="absolute -top-4 right-[15%] w-80 h-80 rounded-full bg-emerald-400/15 dark:bg-emerald-600/10 blur-[100px] animate-blob-2" />
+          <div className="absolute top-[120px] left-[35%] w-96 h-96 rounded-full bg-sky-400/20 dark:bg-indigo-600/10 blur-[120px] animate-blob-3" />
+        </div>
         
         {/* Hero Section */}
         <section className="text-center max-w-3xl mx-auto mb-10 md:mb-14">
