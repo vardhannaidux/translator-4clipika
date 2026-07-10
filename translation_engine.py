@@ -1134,13 +1134,12 @@ def translate_text(text, editorial_mode=False, homework_mode=None, strict_roundt
         
     output_text = '\n'.join(translated_lines)
     output_text = apply_longest_match_replacements(output_text, corrections)
-    
-    if token_dict:
-        output_text = apply_longest_match_replacements(output_text, token_dict)
-    output_text = apply_longest_match_replacements(output_text, corrections)
         
     for pat in ["¥Ù¤"]:
         output_text = output_text.replace(pat, "")
+
+    if token_dict:
+        output_text = apply_longest_match_replacements(output_text, token_dict)
         
     return output_text
 
