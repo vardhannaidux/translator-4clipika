@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eenadu 4C Lipika Translator</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header>
+            <div class="logo-area">
+                <i class="fa-solid fa-language logo-icon"></i>
+                <div>
+                    <h1>Eenadu 4C Lipika Translator</h1>
+                    <p class="subtitle">High-fidelity newsroom translation & transdecoding suite</p>
+                </div>
+            </div>
+            <div class="header-controls">
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="icon-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dynamic Conversion Direction Card -->
+        <div class="direction-card card">
+            <div class="direction-switch">
+                <button id="dir-uni-to-leg" class="switch-btn active" data-dir="unicode_to_legacy">
+                    <span class="btn-title">Unicode → 4C Lipika</span>
+                    <span class="btn-sub">Telugu Unicode to legacy visual bytes</span>
+                </button>
+                <button id="dir-leg-to-uni" class="switch-btn" data-dir="legacy_to_unicode">
+                    <span class="btn-title">4C Lipika → Unicode</span>
+                    <span class="btn-sub">Transdecode legacy visual bytes to Unicode</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mode Select Tab Bar -->
+        <div class="tabs-container">
+            <button id="tab-text" class="tab-btn active">
+                <i class="fa-solid fa-keyboard"></i> Text Translator
+            </button>
+            <button id="tab-file" class="tab-btn">
+                <i class="fa-solid fa-file-invoice"></i> File Translator
+            </button>
+        </div>
+
+        <!-- Tab Content 1: Text -->
+        <main id="content-text" class="tab-content active">
+            <div class="translation-grid">
+                <!-- Input Panel -->
+                <div class="panel card">
+                    <div class="panel-header">
+                        <label id="input-label" for="text-input" class="panel-title">Telugu Unicode Input</label>
+                        <button id="clear-btn" class="text-btn" title="Clear text"><i class="fa-solid fa-trash-can"></i> Clear</button>
+                    </div>
+                    <div class="textarea-wrapper">
+                        <textarea id="text-input" placeholder="Type or paste text here..."></textarea>
+                    </div>
+                    <div class="panel-footer">
+                        <span id="input-stats" class="stats-text">Chars: 0 | Words: 0</span>
+                    </div>
+                </div>
+
+                <!-- Center action options -->
+                <div class="settings-bar card">
+                    <div class="editorial-setting">
+                        <label class="checkbox-container" id="editorial-container">
+                            <input type="checkbox" id="editorial-check">
+                            <span class="checkmark"></span>
+                            Enable Editorial Archive Mode (Optional spellcheck & corrections)
+                        </label>
+                    </div>
+                    <button id="translate-btn" class="action-btn">
+                        <i class="fa-solid fa-bolt"></i> Translate
+                    </button>
+                </div>
+
+                <!-- Output Panel -->
+                <div class="panel card">
+                    <div class="panel-header">
+                        <label id="output-label" for="text-output" class="panel-title">4C Lipika Output</label>
+                        <button id="copy-btn" class="text-btn" title="Copy to clipboard"><i class="fa-solid fa-copy"></i> Copy</button>
+                    </div>
+                    <div class="textarea-wrapper">
+                        <textarea id="text-output" readonly placeholder="Translated output will appear here..."></textarea>
+                    </div>
+                    <div class="panel-footer">
+                        <span id="output-stats" class="stats-text">Chars: 0 | Speed: 0 ms</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Tab Content 2: File -->
+        <main id="content-file" class="tab-content">
+            <div class="file-uploader-card card">
+                <h2>Document Translation Service</h2>
+                <p class="uploader-subtitle">Supports batch translation of Telugu documents while preserving run-level styling</p>
+                
+                <!-- Drag and Drop Area -->
+                <div id="drop-zone" class="drop-zone">
+                    <input type="file" id="file-input" accept=".txt,.docx" hidden>
+                    <div class="drop-zone-content">
+                        <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                        <h3>Drag & Drop file here</h3>
+                        <p class="file-types">Supports .txt and .docx (Max 5MB)</p>
+                        <button id="browse-btn" class="action-btn secondary">Browse File</button>
+                    </div>
+                </div>
+
+                <!-- Selected File Card -->
+                <div id="file-card" class="file-card hidden">
+                    <div class="file-info">
+                        <i id="file-icon" class="fa-solid fa-file-word"></i>
+                        <div class="file-details">
+                            <span id="file-name" class="file-name">document.docx</span>
+                            <span id="file-size" class="file-size">45 KB</span>
+                        </div>
+                        <button id="remove-file-btn" class="icon-btn danger" title="Remove File"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div id="progress-container" class="progress-container hidden">
+                        <div class="progress-bar-wrapper">
+                            <div id="progress-bar" class="progress-bar"></div>
+                        </div>
+                        <span id="progress-status" class="progress-status">Uploading...</span>
+                    </div>
+                    
+                    <div class="file-actions">
+                        <button id="translate-file-btn" class="action-btn">
+                            <i class="fa-solid fa-gears"></i> Translate & Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2026 Eenadu 4C Lipika Translator Suite • Production Stable v60.0</p>
+        </footer>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

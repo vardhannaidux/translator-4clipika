@@ -1,0 +1,26 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local configuration and logs
+logs/
+sandbox/config.json
+sandbox/autosave_backup.txt
+sandbox/*.tmp
+*.tmp
+
+# Environment folders
+venv/
+.venv/
+env/
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
