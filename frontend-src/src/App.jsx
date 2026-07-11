@@ -32,17 +32,24 @@ function App() {
     return 'light';
   });
 
-  const [direction, setDirection] = useState('unicode_to_legacy'); // 'unicode_to_legacy' | 'legacy_to_unicode'
-  const [activeTab, setActiveTab] = useState('text'); // 'text' | 'file'
-  
-  // Mic speech translation states
+  const [direction, setDirection] = useState('unicode_to_legacy');
+  const [activeTab, setActiveTab] = useState('text');
+
+  // --- TEXT TRANSLATION STATE (declared early so refs can sync) ---
+  const [inputText, setInputText] = useState('');
+  const [outputText, setOutputText] = useState('');
+  const [editorialMode, setEditorialMode] = useState(false);
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [stats, setStats] = useState({ chars: 0, words: 0, speedMs: 0 });
+
+  // --- MIC / SPEECH STATE ---
   const [speechState, setSpeechState] = useState('inactive'); // 'inactive' | 'listening' | 'paused'
   const recognitionRef = useRef(null);
   const speechBaseTextRef = useRef('');
-  
   const speechStateRef = useRef('inactive');
   const inputTextRef = useRef('');
 
+  // Keep refs in sync so recognition callbacks always see current values
   useEffect(() => {
     speechStateRef.current = speechState;
   }, [speechState]);
@@ -50,13 +57,6 @@ function App() {
   useEffect(() => {
     inputTextRef.current = inputText;
   }, [inputText]);
-  
-  // Text translation states
-  const [inputText, setInputText] = useState('');
-  const [outputText, setOutputText] = useState('');
-  const [editorialMode, setEditorialMode] = useState(false);
-  const [isTranslating, setIsTranslating] = useState(false);
-  const [stats, setStats] = useState({ chars: 0, words: 0, speedMs: 0 });
 
   // File translation states
   const [selectedFile, setSelectedFile] = useState(null);
