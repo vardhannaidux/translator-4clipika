@@ -515,8 +515,11 @@ function App() {
           handleRemoveFile={handleRemoveFile}
           handleTranslateFile={handleTranslateFile}
           fileInputRef={fileInputRef}
-          isListening={isListening}
-          handleToggleListening={handleToggleListening}
+          speechState={speechState}
+          handleStartSpeech={handleStartSpeech}
+          handlePauseSpeech={handlePauseSpeech}
+          handleResumeSpeech={handleResumeSpeech}
+          handleStopSpeech={handleStopSpeech}
         />
         <AboutSection />
       </main>

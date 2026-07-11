@@ -12,7 +12,10 @@ import {
   AlertCircle,
   ArrowRight,
   Sparkles,
-  Mic
+  Mic,
+  Pause,
+  Play,
+  Square
 } from 'lucide-react';
 
 export default function TranslatorWorkspace({
@@ -42,8 +45,11 @@ export default function TranslatorWorkspace({
   handleRemoveFile,
   handleTranslateFile,
   fileInputRef,
-  isListening,
-  handleToggleListening
+  speechState,
+  handleStartSpeech,
+  handlePauseSpeech,
+  handleResumeSpeech,
+  handleStopSpeech
 }) {
   const inputCharCount = inputText.length;
   const inputWordCount = inputText.trim() ? inputText.trim().split(/\s+/).length : 0;
@@ -155,18 +161,61 @@ export default function TranslatorWorkspace({
                       </span>
                       <div className="flex items-center gap-2">
                         {direction === 'unicode_to_legacy' && (
-                          <button
-                            onClick={handleToggleListening}
-                            className={`text-xs font-bold flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all duration-200 cursor-pointer ${
-                              isListening
-                                ? 'bg-rose-500/20 text-rose-600 border border-rose-500/30 animate-pulse'
-                                : 'text-slate-500 hover:text-blue-600 hover:bg-slate-200/50 dark:hover:bg-slate-800/80'
-                            }`}
-                            title={isListening ? 'Stop listening' : 'Start speaking Telugu'}
-                          >
-                            <Mic className="w-3.5 h-3.5" />
-                            <span>{isListening ? 'Listening...' : 'Speak'}</span>
-                          </button>
+                          <div className="flex items-center bg-slate-200/50 dark:bg-slate-800/50 border border-slate-300/30 dark:border-slate-700/50 rounded-xl p-1 shadow-inner gap-1">
+                            {speechState === 'inactive' && (
+                              <button
+                                onClick={handleStartSpeech}
+                                className="text-xs font-bold flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-350 hover:bg-slate-300/40 dark:hover:bg-slate-700/60 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 cursor-pointer"
+                                title="Start speaking Telugu"
+                              >
+                                <Mic className="w-3.5 h-3.5" />
+                                <span>Speak</span>
+                              </button>
+                            )}
+                            
+                            {speechState === 'listening' && (
+                              <>
+                                <span className="flex h-2.5 w-2.5 relative mx-2">
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+                                </span>
+                                <button
+                                  onClick={handlePauseSpeech}
+                                  className="p-1.5 rounded-lg text-slate-500 hover:text-amber-500 hover:bg-slate-300/40 dark:hover:bg-slate-700/60 transition-all duration-200 cursor-pointer"
+                                  title="Pause dictation"
+                                >
+                                  <Pause className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={handleStopSpeech}
+                                  className="p-1.5 rounded-lg text-slate-500 hover:text-rose-500 hover:bg-slate-300/40 dark:hover:bg-slate-700/60 transition-all duration-200 cursor-pointer"
+                                  title="Stop dictation"
+                                >
+                                  <Square className="w-3.5 h-3.5" />
+                                </button>
+                              </>
+                            )}
+
+                            {speechState === 'paused' && (
+                              <>
+                                <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 px-2 animate-pulse">Paused</span>
+                                <button
+                                  onClick={handleResumeSpeech}
+                                  className="p-1.5 rounded-lg text-slate-500 hover:text-blue-500 hover:bg-slate-300/40 dark:hover:bg-slate-700/60 transition-all duration-200 cursor-pointer"
+                                  title="Resume dictation"
+                                >
+                                  <Play className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={handleStopSpeech}
+                                  className="p-1.5 rounded-lg text-slate-500 hover:text-rose-500 hover:bg-slate-300/40 dark:hover:bg-slate-700/60 transition-all duration-200 cursor-pointer"
+                                  title="Stop dictation"
+                                >
+                                  <Square className="w-3.5 h-3.5" />
+                                </button>
+                              </>
+                            )}
+                          </div>
                         )}
                         {inputText && (
                           <button
