@@ -11,7 +11,8 @@ import {
   Download,
   AlertCircle,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  Mic
 } from 'lucide-react';
 
 export default function TranslatorWorkspace({
@@ -40,7 +41,9 @@ export default function TranslatorWorkspace({
   handleFileChange,
   handleRemoveFile,
   handleTranslateFile,
-  fileInputRef
+  fileInputRef,
+  isListening,
+  handleToggleListening
 }) {
   const inputCharCount = inputText.length;
   const inputWordCount = inputText.trim() ? inputText.trim().split(/\s+/).length : 0;
@@ -150,15 +153,31 @@ export default function TranslatorWorkspace({
                       <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                         {direction === 'unicode_to_legacy' ? 'Telugu Unicode' : '4C Lipika Legacy'}
                       </span>
-                      {inputText && (
-                        <button
-                          onClick={handleClearText}
-                          className="text-xs font-bold text-slate-500 hover:text-rose-500 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-800/80 transition-all duration-200 cursor-pointer"
-                          title="Clear input text"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" /> Clear
-                        </button>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {direction === 'unicode_to_legacy' && (
+                          <button
+                            onClick={handleToggleListening}
+                            className={`text-xs font-bold flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all duration-200 cursor-pointer ${
+                              isListening
+                                ? 'bg-rose-500/20 text-rose-600 border border-rose-500/30 animate-pulse'
+                                : 'text-slate-500 hover:text-blue-600 hover:bg-slate-200/50 dark:hover:bg-slate-800/80'
+                            }`}
+                            title={isListening ? 'Stop listening' : 'Start speaking Telugu'}
+                          >
+                            <Mic className="w-3.5 h-3.5" />
+                            <span>{isListening ? 'Listening...' : 'Speak'}</span>
+                          </button>
+                        )}
+                        {inputText && (
+                          <button
+                            onClick={handleClearText}
+                            className="text-xs font-bold text-slate-500 hover:text-rose-500 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-800/80 transition-all duration-200 cursor-pointer"
+                            title="Clear input text"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" /> Clear
+                          </button>
+                        )}
+                      </div>
                     </div>
                     <textarea
                       value={inputText}

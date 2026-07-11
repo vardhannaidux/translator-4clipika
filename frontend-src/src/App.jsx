@@ -35,6 +35,10 @@ function App() {
   const [direction, setDirection] = useState('unicode_to_legacy'); // 'unicode_to_legacy' | 'legacy_to_unicode'
   const [activeTab, setActiveTab] = useState('text'); // 'text' | 'file'
   
+  // Mic speech translation states
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef(null);
+  
   // Text translation states
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
@@ -89,6 +93,65 @@ function App() {
       lenis.destroy();
     };
   }, [isLoggedIn]);
+
+  // --- EFFECT: Web Speech API ---
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const rec = new SpeechRecognition();
+      rec.continuous = true;
+      rec.interimResults = true;
+      rec.lang = 'te-IN';
+
+      rec.onresult = (event) => {
+        let finalTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          }
+        }
+        if (finalTranscript) {
+          setInputText((prev) => prev + (prev ? ' ' : '') + finalTranscript);
+        }
+      };
+
+      rec.onerror = (e) => {
+        console.error(e);
+        if (e.error !== 'no-speech') {
+          showToast('Speech error: ' + e.error, 'error');
+        }
+        setIsListening(false);
+      };
+
+      rec.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current = rec;
+    }
+  }, []);
+
+  const handleToggleListening = () => {
+    if (!recognitionRef.current) {
+      showToast('Speech recognition not supported in this browser. Please use Chrome.', 'error');
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+      showToast('Mic stopped', 'info');
+    } else {
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+        showToast('Listening Telugu... Speak now!', 'success');
+      } catch (err) {
+        console.error(err);
+        setIsListening(false);
+      }
+    }
+  };
 
   // --- TOAST HELPER ---
   const showToast = (message, type = 'info') => {
@@ -435,6 +498,8 @@ function App() {
           handleRemoveFile={handleRemoveFile}
           handleTranslateFile={handleTranslateFile}
           fileInputRef={fileInputRef}
+          isListening={isListening}
+          handleToggleListening={handleToggleListening}
         />
         <AboutSection />
       </main>
