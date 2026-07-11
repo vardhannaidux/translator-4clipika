@@ -36,9 +36,20 @@ function App() {
   const [activeTab, setActiveTab] = useState('text'); // 'text' | 'file'
   
   // Mic speech translation states
-  const [isListening, setIsListening] = useState(false);
+  const [speechState, setSpeechState] = useState('inactive'); // 'inactive' | 'listening' | 'paused'
   const recognitionRef = useRef(null);
   const speechBaseTextRef = useRef('');
+  
+  const speechStateRef = useRef('inactive');
+  const inputTextRef = useRef('');
+
+  useEffect(() => {
+    speechStateRef.current = speechState;
+  }, [speechState]);
+
+  useEffect(() => {
+    inputTextRef.current = inputText;
+  }, [inputText]);
   
   // Text translation states
   const [inputText, setInputText] = useState('');
@@ -111,14 +122,14 @@ function App() {
             finalTranscript += (finalTranscript ? ' ' : '') + event.results[i][0].transcript;
           }
         }
-        
+
         const deduplicateConsecutive = (text) => {
           if (!text) return '';
           const words = text.trim().split(/\s+/);
           const result = [];
           for (let k = 0; k < words.length; k++) {
-            const currentClean = words[k].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, "").toLowerCase().trim();
-            const prevClean = k > 0 ? words[k - 1].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, "").toLowerCase().trim() : "";
+            const currentClean = words[k].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, '').toLowerCase().trim();
+            const prevClean = k > 0 ? words[k - 1].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, '').toLowerCase().trim() : '';
             if (k === 0 || currentClean !== prevClean) {
               result.push(words[k]);
             }
@@ -132,42 +143,81 @@ function App() {
       };
 
       rec.onerror = (e) => {
-        console.error(e);
-        if (e.error !== 'no-speech') {
-          showToast('Speech error: ' + e.error, 'error');
+        console.error('SpeechRecognition error:', e.error);
+        if (e.error === 'not-allowed') {
+          showToast('Microphone access denied. Please allow mic access in browser settings.', 'error');
+          setSpeechState('inactive');
+        } else if (e.error === 'network') {
+          showToast('Network error during speech recognition. Check your connection.', 'error');
+          setSpeechState('inactive');
+        } else if (e.error !== 'no-speech' && e.error !== 'aborted') {
+          showToast('Speech recognition error: ' + e.error, 'error');
+          setSpeechState('inactive');
         }
-        setIsListening(false);
       };
 
       rec.onend = () => {
-        setIsListening(false);
+        // Auto-restart if browser times out between pauses
+        if (speechStateRef.current === 'listening') {
+          try {
+            rec.start();
+          } catch (_) {
+            setSpeechState('inactive');
+          }
+        } else if (speechStateRef.current !== 'paused') {
+          setSpeechState('inactive');
+        }
       };
 
       recognitionRef.current = rec;
     }
   }, []);
 
-  const handleToggleListening = () => {
+  /** Start a fresh dictation session */
+  const handleStartSpeech = () => {
     if (!recognitionRef.current) {
-      showToast('Speech recognition not supported in this browser. Please use Chrome.', 'error');
+      showToast('Speech recognition is not supported in this browser. Please use Chrome or Edge.', 'error');
       return;
     }
-
-    if (isListening) {
-      recognitionRef.current.stop();
-      setIsListening(false);
-      showToast('Mic stopped', 'info');
-    } else {
-      try {
-        speechBaseTextRef.current = inputText;
-        recognitionRef.current.start();
-        setIsListening(true);
-        showToast('Listening Telugu... Speak now!', 'success');
-      } catch (err) {
-        console.error(err);
-        setIsListening(false);
-      }
+    try {
+      speechBaseTextRef.current = inputTextRef.current;
+      recognitionRef.current.start();
+      setSpeechState('listening');
+      showToast('Listening... Speak in Telugu now!', 'success');
+    } catch (err) {
+      console.error(err);
+      showToast('Could not start the microphone. Try again.', 'error');
     }
+  };
+
+  /** Pause dictation without clearing collected text */
+  const handlePauseSpeech = () => {
+    if (!recognitionRef.current) return;
+    try { recognitionRef.current.stop(); } catch (_) {}
+    setSpeechState('paused');
+    showToast('Dictation paused', 'info');
+  };
+
+  /** Resume from paused state */
+  const handleResumeSpeech = () => {
+    if (!recognitionRef.current) return;
+    try {
+      speechBaseTextRef.current = inputTextRef.current;
+      recognitionRef.current.start();
+      setSpeechState('listening');
+      showToast('Resumed listening...', 'success');
+    } catch (err) {
+      console.error(err);
+      showToast('Could not resume microphone. Try again.', 'error');
+    }
+  };
+
+  /** Stop and finalise dictation */
+  const handleStopSpeech = () => {
+    if (!recognitionRef.current) return;
+    try { recognitionRef.current.stop(); } catch (_) {}
+    setSpeechState('inactive');
+    showToast('Dictation stopped', 'info');
   };
 
   // --- TOAST HELPER ---
