@@ -9,7 +9,7 @@ import sys
 import os
 import time
 from typing import Optional
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request, Depends
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request, Depends, Header
 from fastapi.responses import StreamingResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -83,6 +83,14 @@ def rate_limit_dependency(request: Request) -> None:
     rate_limiter.check_rate_limit(ip)
 
 
+def auth_dependency(x_auth_token: Optional[str] = Header(None)) -> None:
+    if x_auth_token != "eenadu_1976":
+        raise HTTPException(
+            status_code=401,
+            detail="Unauthorized. Please log in with correct credentials."
+        )
+
+
 # --- API ROUTES ---
 
 @app.get("/api/health", tags=["System"])
@@ -94,7 +102,7 @@ def health_check():
 @app.post(
     "/api/translate/text",
     response_model=TranslationResponse,
-    dependencies=[Depends(rate_limit_dependency)],
+    dependencies=[Depends(rate_limit_dependency), Depends(auth_dependency)],
     tags=["Translation"]
 )
 async def translate_text_endpoint(req: TranslationRequest):
@@ -123,7 +131,7 @@ async def translate_text_endpoint(req: TranslationRequest):
 
 @app.post(
     "/api/translate/file",
-    dependencies=[Depends(rate_limit_dependency)],
+    dependencies=[Depends(rate_limit_dependency), Depends(auth_dependency)],
     tags=["Translation"]
 )
 async def translate_file_endpoint(
