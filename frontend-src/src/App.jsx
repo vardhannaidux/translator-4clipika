@@ -447,7 +447,7 @@ function App() {
                 Eenadu 4C Lipika
               </h1>
               <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                High-fidelity newsroom translator
+                High-fidelity newsroom translator • Developed by Vardhan Naidu
               </p>
             </div>
           </div>
@@ -876,7 +876,7 @@ function App() {
       {/* Footer */}
       <footer className="w-full bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-850 py-8 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400 font-semibold">
-          <p>© 2026 Eenadu 4C Lipika Translator Suite • Production Stable v60.0</p>
+          <p>© 2026 Eenadu 4C Lipika Translator Suite • Developed by Vardhan Naidu • Production Stable v60.0</p>
           <div className="flex items-center gap-6">
             <a href="https://github.com/vardhan30016/EEnadu_Translator" target="_blank" rel="noopener noreferrer" className="hover:text-slate-850 dark:hover:text-white transition-colors">
               GitHub Repo

@@ -7,6 +7,8 @@
 
 A high-fidelity, production-grade web application and REST API suite designed to convert modern **Telugu Unicode** text to and from legacy **Eenadu 4C Lipika** font encoding (CP1252/CP1251 based visual byte sequences).
 
+Developed by: **Vardhan Naidu**
+
 ---
 
 ## Overview
