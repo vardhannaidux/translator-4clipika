@@ -36,6 +36,140 @@ const Github = ({ className, ...props }) => (
 );
 
 
+// --- RENDER INTERACTIVE BACKGROUND ---
+const AnimatedBackground = ({ theme }) => {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    const particles = [];
+    const particleCount = Math.min(60, Math.floor((width * height) / 25000));
+    const isDark = theme === 'dark';
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = (Math.random() - 0.5) * 0.4;
+        this.radius = Math.random() * 2 + 1;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > width) this.vx = -this.vx;
+        if (this.y < 0 || this.y > height) this.vy = -this.vy;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = isDark ? 'rgba(59, 130, 246, 0.4)' : 'rgba(37, 99, 235, 0.2)';
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+
+    let mouseX = null;
+    let mouseY = null;
+
+    const handleMouseMove = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
+
+    const handleMouseLeave = () => {
+      mouseX = null;
+      mouseY = null;
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseleave', handleMouseLeave);
+
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      particles.forEach((p) => {
+        p.update();
+        p.draw();
+      });
+
+      const maxDistance = 140;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < maxDistance) {
+            const alpha = (1 - dist / maxDistance) * 0.15;
+            ctx.strokeStyle = isDark
+              ? `rgba(99, 102, 241, ${alpha})`
+              : `rgba(59, 130, 246, ${alpha})`;
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+
+        if (mouseX !== null && mouseY !== null) {
+          const dx = particles[i].x - mouseX;
+          const dy = particles[i].y - mouseY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 180) {
+            const alpha = (1 - dist / 180) * 0.25;
+            ctx.strokeStyle = isDark
+              ? `rgba(147, 51, 234, ${alpha})`
+              : `rgba(99, 102, 241, ${alpha})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(mouseX, mouseY);
+            ctx.stroke();
+          }
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [theme]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none -z-20 w-full h-full"
+    />
+  );
+};
+
+
 function App() {
   // --- STATE ---
   const [theme, setTheme] = useState(() => {
@@ -269,7 +403,8 @@ function App() {
   const inputWordCount = inputText.trim() ? inputText.trim().split(/\s+/).length : 0;
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300 relative overflow-hidden">
+      <AnimatedBackground theme={theme} />
       
       {/* Toast Notification Stack */}
       <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none">
@@ -690,38 +825,48 @@ function App() {
         </div>
 
         {/* Informational About Section */}
-        <section id="about" className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-slate-100/40 dark:bg-slate-900/30 rounded-3xl border border-slate-100 dark:border-slate-850/80 p-8 md:p-12 mb-8">
-          <div>
+        <section id="about" className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-slate-100/40 dark:bg-slate-900/30 rounded-3xl border border-slate-100 dark:border-slate-850/80 p-8 md:p-12 mb-8">
+          <div className="lg:col-span-7">
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">How it works</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
               Historically, newsrooms like *Eenadu* composed content in legacy layouts using CP1252-based font layers (like 4C Lipika) that mapped English characters visually onto Telugu glyphs. While this worked for print layouts, the raw text is unsearchable, unindexed, and unreadable on standard digital platforms.
             </p>
-            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
               This suite performs high-fidelity, bidirectional transdecoding. It translates text layouts to/from Telugu Unicode, resolving complex clusters, consonants, and vowel matras correctly, both for raw text fields and document layers.
             </p>
-          </div>
-          <div className="flex flex-col gap-4 border-l border-slate-200 dark:border-slate-800 pl-0 md:pl-8">
-            <div className="flex gap-4">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
-                <Sparkles className="w-5 h-5" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-slate-200/50 dark:border-slate-800">
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">Editorial Overrides</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    Enables dictionary mapping spellcheck corrections specifically optimized for print typography runs.
+                  </p>
+                </div>
               </div>
-              <div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white">Editorial Overrides</h4>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  Enables dictionary mapping spellcheck corrections specifically optimized for print typography runs.
-                </p>
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">Word Run Preservation</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    Correctly processes `.docx` files by parsing paragraphs and run segments individually, keeping inline fonts and styling intact.
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="flex gap-4">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
-                <FileText className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white">Word Run Preservation</h4>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  Correctly processes `.docx` files by parsing paragraphs and run segments individually, keeping inline fonts and styling intact.
-                </p>
-              </div>
+          </div>
+          <div className="lg:col-span-5 relative group overflow-hidden rounded-2xl border border-slate-200/30 dark:border-slate-800 shadow-lg">
+            <img 
+              src="/glowing_translation_network.png" 
+              alt="Neural translation network" 
+              className="w-full h-auto object-cover transform hover:scale-102 transition-transform duration-500" 
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-4">
+              <span className="text-xs text-white/90 font-medium">Authoritative Font Mapping Network Model</span>
             </div>
           </div>
         </section>
