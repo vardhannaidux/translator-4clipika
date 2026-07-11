@@ -825,48 +825,38 @@ function App() {
         </div>
 
         {/* Informational About Section */}
-        <section id="about" className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-slate-100/40 dark:bg-slate-900/30 rounded-3xl border border-slate-100 dark:border-slate-850/80 p-8 md:p-12 mb-8">
-          <div className="lg:col-span-7">
+        <section id="about" className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-slate-100/40 dark:bg-slate-900/30 rounded-3xl border border-slate-100 dark:border-slate-850/80 p-8 md:p-12 mb-8">
+          <div>
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">How it works</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
               Historically, newsrooms like *Eenadu* composed content in legacy layouts using CP1252-based font layers (like 4C Lipika) that mapped English characters visually onto Telugu glyphs. While this worked for print layouts, the raw text is unsearchable, unindexed, and unreadable on standard digital platforms.
             </p>
-            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
               This suite performs high-fidelity, bidirectional transdecoding. It translates text layouts to/from Telugu Unicode, resolving complex clusters, consonants, and vowel matras correctly, both for raw text fields and document layers.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-slate-200/50 dark:border-slate-800">
-              <div className="flex gap-4">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
-                  <Sparkles className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">Editorial Overrides</h4>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    Enables dictionary mapping spellcheck corrections specifically optimized for print typography runs.
-                  </p>
-                </div>
+          </div>
+          <div className="flex flex-col gap-4 border-l border-slate-200 dark:border-slate-800 pl-0 md:pl-8">
+            <div className="flex gap-4">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
+                <Sparkles className="w-5 h-5" />
               </div>
-              <div className="flex gap-4">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
-                  <FileText className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">Word Run Preservation</h4>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    Correctly processes `.docx` files by parsing paragraphs and run segments individually, keeping inline fonts and styling intact.
-                  </p>
-                </div>
+              <div>
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white">Editorial Overrides</h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  Enables dictionary mapping spellcheck corrections specifically optimized for print typography runs.
+                </p>
               </div>
             </div>
-          </div>
-          <div className="lg:col-span-5 relative group overflow-hidden rounded-2xl border border-slate-200/30 dark:border-slate-800 shadow-lg">
-            <img 
-              src="/glowing_translation_network.png" 
-              alt="Neural translation network" 
-              className="w-full h-auto object-cover transform hover:scale-102 transition-transform duration-500" 
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-4">
-              <span className="text-xs text-white/90 font-medium">Authoritative Font Mapping Network Model</span>
+            <div className="flex gap-4">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
+                <FileText className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white">Word Run Preservation</h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  Correctly processes `.docx` files by parsing paragraphs and run segments individually, keeping inline fonts and styling intact.
+                </p>
+              </div>
             </div>
           </div>
         </section>
