@@ -108,11 +108,27 @@ function App() {
         let finalTranscript = '';
         for (let i = 0; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
-            finalTranscript += event.results[i][0].transcript;
+            finalTranscript += (finalTranscript ? ' ' : '') + event.results[i][0].transcript;
           }
         }
+        
+        const deduplicateConsecutive = (text) => {
+          if (!text) return '';
+          const words = text.trim().split(/\s+/);
+          const result = [];
+          for (let k = 0; k < words.length; k++) {
+            const currentClean = words[k].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, "").toLowerCase().trim();
+            const prevClean = k > 0 ? words[k - 1].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, "").toLowerCase().trim() : "";
+            if (k === 0 || currentClean !== prevClean) {
+              result.push(words[k]);
+            }
+          }
+          return result.join(' ');
+        };
+
+        const cleanedTranscript = deduplicateConsecutive(finalTranscript);
         const base = speechBaseTextRef.current;
-        setInputText(base + (base && finalTranscript ? ' ' : '') + finalTranscript);
+        setInputText(base + (base && cleanedTranscript ? ' ' : '') + cleanedTranscript);
       };
 
       rec.onerror = (e) => {
