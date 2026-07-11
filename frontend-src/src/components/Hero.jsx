@@ -49,7 +49,6 @@ export default function Hero() {
             variants={itemVariants}
             className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1] md:leading-[1.15]"
           >
-            Cinematic Bi-Directional <br />
             <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500 bg-clip-text text-transparent">
               Telugu Font Converter
             </span>
