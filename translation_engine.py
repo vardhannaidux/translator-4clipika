@@ -49,6 +49,57 @@ def _get_sorted_keys():
     return _MATCH_KEYS, _MAX_LOOKAHEAD
 
 # =====================================================================
+# Module-level one-time initialization of mutable global state.
+# These mutations must NOT happen inside translate_text() to avoid
+# accumulating state across calls (root cause of inconsistent output).
+# =====================================================================
+import translation_mappings as _tm
+
+# Fix 1: Set required CONJUNCT_RULES entries once at startup.
+_tm.CONJUNCT_RULES[(_tm.U_KA, _tm.M_OO, None)] = [218, 193]
+_tm.CONJUNCT_RULES[(_tm.U_DHA, _tm.M_AA, None)] = [235, 197, 175]
+
+# Save canonical copies so homework mode can restore them after each call.
+_CONJUNCT_RULES_BACKUP = dict(_tm.CONJUNCT_RULES)
+
+# Fix 2: Set required CONSONANT head_ii overrides once at startup.
+try:
+    _tm.CONSONANTS[_tm.U_JA]['head_ii']  = _tm.CONSONANTS.get(_tm.U_JA,  {}).get('head_ii')  or 64
+    _tm.CONSONANTS[_tm.U_DHA]['head_ii'] = _tm.CONSONANTS.get(_tm.U_DHA, {}).get('head_ii') or 68
+    _tm.CONSONANTS[_tm.U_DA]['head_ii']  = _tm.CONSONANTS.get(_tm.U_DA,  {}).get('head_ii')  or 68
+except Exception:
+    pass
+
+# Fix 3: Populate FORCE_VATTU_BEFORE_POST once at startup.
+try:
+    _tm.FORCE_VATTU_BEFORE_POST.update({
+        (_tm.U_GA, _tm.M_EE, (_tm.U_RA,)),
+        (_tm.U_HA, None,     (_tm.U_KA, _tm.U_KA)),
+    })
+except Exception:
+    pass
+
+# Fix 4: Pre-populate CONJUNCT_LIBRARY with common words once at startup.
+# (deferred until render() is available — see _init_conjunct_library below)
+_CONJUNCT_LIBRARY_INITIALIZED = False
+
+def _init_conjunct_library():
+    """Populate CONJUNCT_LIBRARY once after render() is available."""
+    global _CONJUNCT_LIBRARY_INITIALIZED
+    if _CONJUNCT_LIBRARY_INITIALIZED:
+        return
+    try:
+        for w in ["టెక్", "కాంగ్రెస్", "రిజర్వే", "హక్కు"]:
+            try:
+                raw, preview, _ = render(w, editorial_mode=False)
+                _tm.CONJUNCT_LIBRARY[w] = raw.decode('cp1252', errors='replace')
+            except Exception:
+                continue
+        _CONJUNCT_LIBRARY_INITIALIZED = True
+    except Exception:
+        pass
+
+# =====================================================================
 # 1. Visual Assembly Engine Flags and Helpers (from engine.py)
 # =====================================================================
 
@@ -1005,44 +1056,25 @@ def translate_text(text, editorial_mode=False, homework_mode=None, strict_roundt
     protect_mappings = {}
     
     import translation_mappings
-    translation_mappings.CONJUNCT_RULES[(translation_mappings.U_KA, translation_mappings.M_OO, None)] = [218, 193]
-    translation_mappings.CONJUNCT_RULES[(translation_mappings.U_DHA, translation_mappings.M_AA, None)] = [235, 197, 175]
 
-    try:
-        translation_mappings.CONSONANTS[translation_mappings.U_JA]['head_ii'] = translation_mappings.CONSONANTS.get(translation_mappings.U_JA, {}).get('head_ii') or 64
-        translation_mappings.CONSONANTS[translation_mappings.U_DHA]['head_ii'] = translation_mappings.CONSONANTS.get(translation_mappings.U_DHA, {}).get('head_ii') or 68
-        translation_mappings.CONSONANTS[translation_mappings.U_DA]['head_ii']  = translation_mappings.CONSONANTS.get(translation_mappings.U_DA,  {}).get('head_ii') or 68
-    except Exception:
-        pass
+    # Ensure one-time CONJUNCT_LIBRARY is populated (safe to call repeatedly).
+    _init_conjunct_library()
 
-    try:
-        translation_mappings.FORCE_VATTU_BEFORE_POST.update({
-            (translation_mappings.U_GA, translation_mappings.M_EE, (translation_mappings.U_RA,)),
-            (translation_mappings.U_HA, None, (translation_mappings.U_KA, translation_mappings.U_KA)),
-        })
-    except Exception:
-        pass
+    # Keys that homework mode must temporarily suppress.
+    _HOMEWORK_SUPPRESS_KEYS = [
+        (translation_mappings.U_KA, translation_mappings.M_OO, None),
+        (translation_mappings.U_DHA, translation_mappings.M_AA, None),
+        (translation_mappings.U_SA, translation_mappings.M_OO, None),
+        (translation_mappings.U_SA, translation_mappings.M_O, None),
+        (translation_mappings.U_SA, translation_mappings.M_AU, None),
+    ]
 
-    try:
-        for w in ["టెక్","కాంగ్రెస్","రిజర్వే","హక్కు"]:
-            try:
-                raw, preview, _ = render(w, editorial_mode=editorial_mode)
-                translation_mappings.CONJUNCT_LIBRARY[w] = raw.decode('cp1252', errors='replace')
-            except Exception:
-                continue
-    except Exception:
-        pass
-
+    # Temporarily suppress homework-incompatible CONJUNCT_RULES for this call only.
+    _suppressed_rules = {}
     if is_homework:
-        for rule_key in [
-            (translation_mappings.U_KA, translation_mappings.M_OO, None),
-            (translation_mappings.U_DHA, translation_mappings.M_AA, None),
-            (translation_mappings.U_SA, translation_mappings.M_OO, None),
-            (translation_mappings.U_SA, translation_mappings.M_O, None),
-            (translation_mappings.U_SA, translation_mappings.M_AU, None)
-        ]:
+        for rule_key in _HOMEWORK_SUPPRESS_KEYS:
             if rule_key in translation_mappings.CONJUNCT_RULES:
-                del translation_mappings.CONJUNCT_RULES[rule_key]
+                _suppressed_rules[rule_key] = translation_mappings.CONJUNCT_RULES.pop(rule_key)
 
     if is_homework:
         from translation_mappings import HOMEWORK_MAPPINGS
@@ -1140,7 +1172,13 @@ def translate_text(text, editorial_mode=False, homework_mode=None, strict_roundt
 
     if token_dict:
         output_text = apply_longest_match_replacements(output_text, token_dict)
-        
+
+    # Restore any CONJUNCT_RULES that were temporarily suppressed for homework mode.
+    # This MUST run before returning so subsequent non-homework calls are unaffected.
+    if _suppressed_rules:
+        import translation_mappings as _tm_restore
+        _tm_restore.CONJUNCT_RULES.update(_suppressed_rules)
+
     return output_text
 
 
