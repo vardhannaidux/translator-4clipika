@@ -38,6 +38,7 @@ function App() {
   // Mic speech translation states
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef(null);
+  const speechBaseTextRef = useRef('');
   
   // Text translation states
   const [inputText, setInputText] = useState('');
@@ -105,14 +106,13 @@ function App() {
 
       rec.onresult = (event) => {
         let finalTranscript = '';
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
+        for (let i = 0; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
             finalTranscript += event.results[i][0].transcript;
           }
         }
-        if (finalTranscript) {
-          setInputText((prev) => prev + (prev ? ' ' : '') + finalTranscript);
-        }
+        const base = speechBaseTextRef.current;
+        setInputText(base + (base && finalTranscript ? ' ' : '') + finalTranscript);
       };
 
       rec.onerror = (e) => {
@@ -143,6 +143,7 @@ function App() {
       showToast('Mic stopped', 'info');
     } else {
       try {
+        speechBaseTextRef.current = inputText;
         recognitionRef.current.start();
         setIsListening(true);
         showToast('Listening Telugu... Speak now!', 'success');
