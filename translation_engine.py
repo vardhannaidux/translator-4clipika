@@ -379,7 +379,7 @@ def assemble_syllable(syl, editorial_mode=False):
         if matra == M_AA and USE_ALT_AA_FOR_VATTU:
             pass
         elif matra in {M_I, M_II, M_O, M_OO}:
-            if base in {U_RA, U_DA, U_DHA}:
+            if base in {U_DA, U_DHA}:
                 context_head = None
             elif base == U_LA and any(v != U_LA for v in post_subs):
                 context_head = None
