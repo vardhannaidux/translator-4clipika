@@ -30,7 +30,7 @@ from config import setup_logger
 logger = setup_logger("backend_main")
 
 # Auth token — set API_AUTH_TOKEN env var in Render dashboard
-API_AUTH_TOKEN = os.environ.get("API_AUTH_TOKEN", "eenadu_1976")
+API_AUTH_TOKEN = os.environ.get("API_AUTH_TOKEN") or "eenadu_1976"
 
 app = FastAPI(
     title="Eenadu 4C Lipika Translator API",
