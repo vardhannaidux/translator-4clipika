@@ -10,3 +10,5 @@ services:
         value: 8000
       - key: LOG_LEVEL
         value: INFO
+      - key: API_AUTH_TOKEN
+        sync: false  # Set this manually in Render Dashboard → Environment

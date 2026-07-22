@@ -29,6 +29,9 @@ from config import setup_logger
 
 logger = setup_logger("backend_main")
 
+# Auth token — set API_AUTH_TOKEN env var in Render dashboard
+API_AUTH_TOKEN = os.environ.get("API_AUTH_TOKEN", "eenadu_1976")
+
 app = FastAPI(
     title="Eenadu 4C Lipika Translator API",
     description="REST API suite for bi-directional Telugu Unicode and 4C Lipika conversion.",
@@ -84,7 +87,7 @@ def rate_limit_dependency(request: Request) -> None:
 
 
 def auth_dependency(x_auth_token: Optional[str] = Header(None)) -> None:
-    if x_auth_token != "eenadu_1976":
+    if x_auth_token != API_AUTH_TOKEN:
         raise HTTPException(
             status_code=401,
             detail="Unauthorized. Please log in with correct credentials."
