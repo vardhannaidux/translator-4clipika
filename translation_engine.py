@@ -1149,7 +1149,7 @@ def translate_text(text, editorial_mode=False, homework_mode=None, strict_roundt
         
     corrections = normalize_corrections_dict(GLOBAL_CORRECTIONS) if (editorial_mode or is_homework) else {}
     
-    if editorial_mode and is_seven_paragraph:
+    if editorial_mode:
         corrections.update(normalize_corrections_dict(EDITORIAL_CORRECTIONS))
         
     for line in lines:
