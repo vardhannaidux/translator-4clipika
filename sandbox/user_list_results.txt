@@ -1,0 +1,27 @@
+ 1. చైతన్య          | Act(ed): àµjêŸìu              | Act(no_ed): àµjêŸìu              | Correct: àµjêŸìu              | Ed Match: True | NoEd Match: True
+ 2. స్కూల్          | Act(ed): ú£«\öËÀ              | Act(no_ed): ú£«\öËÀ              | Correct: ú£«\öËÀ              | Ed Match: True | NoEd Match: True
+ 3. కలర్స్          | Act(ed): ÚÛõôÂq               | Act(no_ed): ÚÛõôÂq               | Correct: ÚÛõôÂq               | Ed Match: True | NoEd Match: True
+ 4. ఇంఛార్జి        | Act(ed): ÏÙàÅ¦Jb              | Act(no_ed): ÏÙàÅ¦Jb              | Correct: ÏÙàÅ¦Jb              | Ed Match: True | NoEd Match: True
+ 5. లక్ష్యం         | Act(ed): õ¤ÛuÙ                | Act(no_ed): õ¤ÛuÙ                | Correct: õ¤ÛuÙ                | Ed Match: True | NoEd Match: True
+ 6. ల్స్            | Act(ed): öËÀq                 | Act(no_ed): öËÀq                 | Correct: öËÀq                 | Ed Match: True | NoEd Match: True
+ 7. స్వీకరణ         | Act(ed): úˆyÚÛô¢é             | Act(no_ed): úˆyÚÛô¢é             | Correct: úˆyÚÛô¢é             | Ed Match: True | NoEd Match: True
+ 8. పరిషత్          | Act(ed): í£Jù£êÂ              | Act(no_ed): í£Jù£êÂ              | Correct: í£Jù£êÂ              | Ed Match: True | NoEd Match: True
+ 9. బాబ్జి          | Act(ed): ò°Gb                 | Act(no_ed): ò°Gb                 | Correct: ò°Gb                 | Ed Match: True | NoEd Match: True
+10. నాయుడు          | Act(ed): û¦óŸ³è[ª             | Act(no_ed): û¦óŸ³è[ª             | Correct: û¦óŸ³è[ª             | Ed Match: True | NoEd Match: True
+11. కట్             | Act(ed): ÚÛæÀ                 | Act(no_ed): ÚÛæÀ                 | Correct: ÚÛæÀ                 | Ed Match: True | NoEd Match: True
+12. అవుట్           | Act(ed): Í÷±æÀ                | Act(no_ed): Í÷±æÀ                | Correct: Í÷±æÀ                | Ed Match: True | NoEd Match: True
+13. శుభాకాంక్షలు    | Act(ed): øŒ‰òÅ°Ú¥Ù¤Ûõª        | Act(no_ed): øŒ‰òÅ°Ú¥Ù¤Ûõª        | Correct: øŒ‰òÅ°Ú¥Ù¤Ûõª        | Ed Match: True | NoEd Match: True
+14. కాల్చి          | Act(ed): Ú¥La                 | Act(no_ed): Ú¥La                 | Correct: Ú¥La                 | Ed Match: True | NoEd Match: True
+15. స్వీట్లు        | Act(ed): úˆyåªx               | Act(no_ed): úˆyåªx               | Correct: úˆyåªx               | Ed Match: True | NoEd Match: True
+16. చెప్పారు        | Act(ed): àµð§pô¢ª             | Act(no_ed): àµð§pô¢ª             | Correct: àµð§pô¢ª             | Ed Match: True | NoEd Match: True
+17. ఫ్రెండ్స్       | Act(ed): všíÆÙèÂq             | Act(no_ed): všíÆÙèÂq             | Correct: všíÆÙèÂq             | Ed Match: True | NoEd Match: True
+18. స్టోర్స్        | Act(ed): þ¼dôÂq               | Act(no_ed): þ¼dôÂq               | Correct: þ¼dôÂq               | Ed Match: True | NoEd Match: True
+19. త్              | Act(ed): êÂ                   | Act(no_ed): êÂ                   | Correct: êÂ                   | Ed Match: True | NoEd Match: True
+20. ఆర్థోపెడిక్     | Act(ed): ÎôÁ–šíè…ÚÂ           | Act(no_ed): ÎôÁ–šíè…ÚÂ           | Correct: ÎôÁ–šíè…ÚÂ           | Ed Match: True | NoEd Match: True
+21. కృష్ణారావు      | Act(ed): ÚÛ”ÿ§gô¦÷±           | Act(no_ed): ÚÛ”ÿ§gô¦÷±           | Correct: ÚÛ”ÿ§gô¦÷±           | Ed Match: True | NoEd Match: True
+22. కార్యాలయం       | Act(ed): Ú¥ô¦uõóŸªÙ           | Act(no_ed): Ú¥ô¦uõóŸªÙ           | Correct: Ú¥ô¦uõóŸªÙ           | Ed Match: True | NoEd Match: True
+23. రమేష్ రాజు      | Act(ed): ô¢î¶ªùÃô¦V           | Act(no_ed): ô¢î¶ªùÃô¦V           | Correct: ô¢î¶ªùÃô¦V           | Ed Match: True | NoEd Match: True
+24. అభివృద్ధి       | Act(ed): ÍGÅ÷”CÌÄ             | Act(no_ed): ÍGÅ÷”CÌÄ             | Correct: ÍGÅ÷”CÌÄ             | Ed Match: True | NoEd Match: True
+25. ఫ్లాష్          | Act(ed): ð§xùÃ                | Act(no_ed): ð§xùÃ                | Correct: ð§xùÃ                | Ed Match: True | NoEd Match: True
+26. ఉపాధ్యాయులు     | Act(ed): Ñð§ëÅ¯uóŸ³õª         | Act(no_ed): Ñð§ëÅ¯uóŸ³õª         | Correct: Ñð§ëÅ¯uóŸ³õª         | Ed Match: True | NoEd Match: True
+27. ఫిట్ నెస్       | Act(ed): íÆ‡æÀûµúÃ            | Act(no_ed): íÆ‡æÀûµúÃ            | Correct: íÆ‡æÀûµúÃ            | Ed Match: True | NoEd Match: True

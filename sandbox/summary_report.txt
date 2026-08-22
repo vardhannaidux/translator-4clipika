@@ -1,0 +1,29 @@
+Idx  | Telugu Input    | Getting in Prompt    | Correct in Prompt    | Engine Output (Ed)   | Status
+---------------------------------------------------------------------------------------------------------
+1    | చైతన్య          | àµjêŸìu              | àµjêŸìu              | àµjêŸìu              | MATCHES CORRECT
+2    | స్కూల్          | ú£«\öËÀ              | ú£«\öËÀ              | ú£«\öËÀ              | MATCHES CORRECT
+3    | కలర్స్          | ÚÛõôÂq               | ÚÛõôÂq               | ÚÛõôÂq               | MATCHES CORRECT
+4    | ఇంఛార్జి        | ÏÙàÅ¦Jb              | ÏÙàÅ¦Jb              | ÏÙàÅ¦Jb              | MATCHES CORRECT
+5    | లక్ష్యం         | õ¤ÛuÙ                | õ¤ÛuÙ                | õ¤ÛuÙ                | MATCHES CORRECT
+6    | ల్స్            | öËqÀ                 | öËÀq                 | öËÀq                 | MATCHES CORRECT
+7    | స్వీకరణ         | úˆyÚÛô¢é             | úˆyÚÛô¢é             | úˆyÚÛô¢é             | MATCHES CORRECT
+8    | పరిషత్          | í£Jù£êÂ              | í£Jù£êÂ              | í£Jù£êÂ              | MATCHES CORRECT
+9    | బాబ్జి          | ò°Gb                 | ò°Gb                 | ò°Gb                 | MATCHES CORRECT
+10   | నాయుడు          | û¦óŸ³è[ª             | û¦óŸ³è[ª             | û¦óŸ³è[ª             | MATCHES CORRECT
+11   | కట్             | ÚÛæÀ                 | ÚÛæÀ                 | ÚÛæÀ                 | MATCHES CORRECT
+12   | అవుట్           | Í÷±æÀ                | Í÷±æÀ                | Í÷±æÀ                | MATCHES CORRECT
+13   | శుభాకాంక్షలు    | øŒ‰òÅ°Ú¥Ù¤Ûõª        | øŒ‰òÅ°Ú¥Ù¤Ûõª        | øŒ‰òÅ°Ú¥Ù¤Ûõª        | MATCHES CORRECT
+14   | కాల్చి          | Ú¥La                 | Ú¥La                 | Ú¥La                 | MATCHES CORRECT
+15   | స్వీట్లు        | úˆyåªx               | úˆyåªx               | úˆyåªx               | MATCHES CORRECT
+16   | చెప్పారు        | àµð§pô¢ª             | àµð§pô¢ª             | àµð§pô¢ª             | MATCHES CORRECT
+17   | ఫ్రెండ్స్       | všíÆÙèqÂ             | všíÆÙèÂq             | všíÆÙèÂq             | MATCHES CORRECT
+18   | స్టోర్స్        | ›ú¥dôÂq              | þ¼dôÂq               | þ¼dôÂq               | MATCHES CORRECT
+19   | త్              | êÂ                   | êÂ                   | êÂ                   | MATCHES CORRECT
+20   | ఆర్థోపెడిక్     | ÎôÂëÇÁšíè…ÚÂ         | ÎôÁ–šíè…ÚÂ           | ÎôÂëÇÁšíè…ÚÂ         | MATCHES GETTING
+21   | కృష్ణారావు      | ÚÛ”ú°gô¦÷±           | ÚÛ”ÿ§gô¦÷±           | ÚÛ”ú°gô¦÷±           | MATCHES GETTING
+22   | కార్యాలయం       | Ú¥ô¢uõóŸªÙ           | Ú¥ô¦uõóŸªÙ           | Ú¥ô¢uõóŸªÙ           | MATCHES GETTING
+23   | రమేష్ రాజు      | ô¢î¶ªù£ ô¦V          | ô¢î¶ªùÃô¦V           | ô¢î¶ªùÃô¦V           | MATCHES CORRECT
+24   | అభివృద్ధి       | ÍGÅ÷”CÌÄ             | ÍGÅ÷”CÌÄ             | ÍGÅ÷”CÌÄ             | MATCHES CORRECT
+25   | ఫ్లాష్          | ðÆ§xùÃ               | ð§xùÃ                | ðÆ§xùÃ               | MATCHES GETTING
+26   | ఉపాధ్యాయులు     | Ñð§ë¯uóŸ³õª          | Ñð§ëÅ¯uóŸ³õª         | Ñð§ëÅ¯uóŸ³õª         | MATCHES CORRECT
+27   | ఫిట్ నెస్       | íÆ‡æÀ ûµúÃ           | íÆ‡æÀûµúÃ            | íÆ‡æÀûµúÃ            | MATCHES CORRECT
