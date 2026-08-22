@@ -11,10 +11,8 @@ def test_paragraph_preserves_word_alignment_and_spaces():
     telugu_words = paragraph.split()
     para_output_words = translated_paragraph.split()
     
-    # Check that word count matches exactly
     assert len(para_output_words) == len(telugu_words), f"Paragraph word count mismatch: {len(para_output_words)} vs {len(telugu_words)}"
     
-    # Check that every word translated in the paragraph matches single-word translation
     for i, word in enumerate(telugu_words):
         single_word_trans = translate_text(word)
-        assert para_output_words[i] == single_word_trans, f"Word mismatch at position {i+1} ('{word}'): paragraph yielded '{para_output_words[i]}', standalone yielded '{single_word_trans}'"
+        assert para_output_words[i] == single_word_trans, f"Mismatch at word {i+1} ({word}): '{para_output_words[i]}' vs '{single_word_trans}'"
